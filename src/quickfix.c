@@ -1433,6 +1433,18 @@ qf_guess_filepath(filename)
 
 }
 
+int qf_getErr_num(qi)
+    qf_info_T *qi;
+{
+    if (qi == NULL)
+	qi = &ql_info;
+
+    if (qi->qf_curlist < qi->qf_listcount)
+        return qi->qf_lists[qi->qf_curlist].qf_count;
+    else
+        return 0;
+}
+
 /*
  * jump to a quickfix line
  * if dir == FORWARD go "errornr" valid entries forward

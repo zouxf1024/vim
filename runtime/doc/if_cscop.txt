@@ -256,12 +256,18 @@ started will have no effect!
 'cscopequickfix' specifies whether to use quickfix window to show cscope
 results.  This is a list of comma-separated values. Each item consists of
 |cscope-find| command (s, g, d, c, t, e, f or i) and flag (+, - or 0).
-'+' indicates that results must be appended to quickfix window,
-'-' implies previous results clearance, '0' or command absence - don't use
-quickfix.  Search is performed from start until first command occurrence.
-The default value is "" (don't use quickfix anyway).  The following value
-seems to be useful: >
+'+' and '-' flags may be followed by optional '!'
+    '+' flag will make cscope append its results to the quickfix window
+    '-' means that results will overwrite previous data
+    '0' or command absence - don't use quickfix
+With '!', cscope will not jump to the first location like |:make|!
+Search is performed from start until first command occurrence.
+The default value is "" (don't use quickfix). The following value
+seems useful enough: >
 	:set cscopequickfix=s-,c-,d-,i-,t-,e-
+<
+Example below will prevent 's' search from jumping to the first location: >
+	:set cscopequickfix=s-!,c-,t0
 <
 							*cscopetag* *cst*
 If 'cscopetag' is set, the commands ":tag" and CTRL-] as well as "vim -t"
@@ -453,6 +459,22 @@ Cscope Home Page (http://cscope.sourceforge.net/): >
 		\:vert scs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 	nmap <C-Space><C-Space>d
 		\:vert scs find d <C-R>=expand("<cword>")<CR><CR>
+<
+
+Another option would be an interactive mapping like: >
+	function! MyCsFind(split)
+	    echo 'Cscope find (c-callers,d-callees,e-grep,f-file,g-def,' .
+		\'i-incl,s-sym,t-assign): '
+	    let cmd = getchar()
+	    exec (a:split ? 'scs' : 'cs') . ' find ' . nr2char(cmd) . ' ' . 
+		\expand(cmd == 'i' || cmd == 'f' ? '<cfile>' : '<cword>')
+	endfunction
+
+	" ask for search command and use word under cursor
+	nmap <Leader>cc :call MyCsFind(0)<CR>
+	" the same plus splitting the window
+	nmap <Leader>cs :call MyCsFind(1)<CR>
+<
 
 ==============================================================================
 7. Cscope availability and information			*cscope-info*

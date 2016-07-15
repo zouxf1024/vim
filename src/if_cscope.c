@@ -1310,7 +1310,13 @@ cs_find_common(opt, pat, forceit, verbose, use_ll, cmdline)
 		     */
 		    qi = (bt_quickfix(wp->w_buffer) && wp->w_llist_ref != NULL)
 			?  wp->w_llist_ref : wp->w_llist;
-		qf_jump(qi, 0, 0, forceit);
+		if (qfpos[1] != '!')
+		    qf_jump(qi, 0, 0, forceit);
+
+		if (qf_getErr_num(qi) > 1)
+                    apply_autocmds(EVENT_QUICKFIXCMDEND, NULL,NULL,FALSE,curbuf);
+		else
+		    qf_jump(qi, 0, 0, forceit);
 	    }
 	}
 	mch_remove(tmp);

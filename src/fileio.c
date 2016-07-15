@@ -7707,6 +7707,7 @@ static struct event_name
     {"OptionSet",	EVENT_OPTIONSET},
     {"QuickFixCmdPost",	EVENT_QUICKFIXCMDPOST},
     {"QuickFixCmdPre",	EVENT_QUICKFIXCMDPRE},
+    {"QuickFixCmdEnd",	EVENT_QUICKFIXCMDEND},
     {"QuitPre",		EVENT_QUITPRE},
     {"RemoteReply",	EVENT_REMOTEREPLY},
     {"SessionLoadPost",	EVENT_SESSIONLOADPOST},
